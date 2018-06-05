@@ -248,14 +248,12 @@ func (q *Qbs) OmitJoin() *Qbs {
 func (q *Qbs) Find(structPtr interface{}) error {
 	q.criteria.model = structPtrToModel(structPtr, !q.criteria.omitJoin, q.criteria.omitFields)
 	q.criteria.limit = 1
-	if !q.criteria.model.pkZero() {
-		idPath := q.Dialect.quote(q.criteria.model.table) + "." + q.Dialect.quote(q.criteria.model.pk.name)
-		idCondition := NewCondition(idPath+" = ?", q.criteria.model.pk.value)
-		if q.criteria.condition == nil {
-			q.criteria.condition = idCondition
-		} else {
-			q.criteria.condition = idCondition.AndCondition(q.criteria.condition)
-		}
+	idPath := q.Dialect.quote(q.criteria.model.table) + "." + q.Dialect.quote(q.criteria.model.pk.name)
+	idCondition := NewCondition(idPath+" = ?", q.criteria.model.pk.value)
+	if q.criteria.condition == nil {
+		q.criteria.condition = idCondition
+	} else {
+		q.criteria.condition = idCondition.AndCondition(q.criteria.condition)
 	}
 	query, args := q.Dialect.querySql(q.criteria)
 	return q.doQueryRow(structPtr, query, args...)
