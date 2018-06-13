@@ -132,6 +132,8 @@ func (d sqlite3) setModelValue(value reflect.Value, field reflect.Value) error {
 				if err != nil {
 					return err
 				}
+			case reflect.TypeOf(time.Time{}).Kind():
+				t = value.Interface().(time.Time)
 			}
 			v := reflect.NewAt(reflect.TypeOf(time.Time{}), unsafe.Pointer(&t))
 			field.Set(v.Elem())
