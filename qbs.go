@@ -22,6 +22,7 @@ var stmtMap map[string]*sql.Stmt
 var mu *sync.RWMutex
 var queryLogger *log.Logger = log.New(os.Stdout, "qbs:", log.LstdFlags)
 var errorLogger *log.Logger = log.New(os.Stderr, "qbs:", log.LstdFlags)
+var timeFormat = "2006-01-02 15:04:05.999999999-07:00"
 
 type Qbs struct {
 	Dialect      Dialect
@@ -120,6 +121,11 @@ func SetConnectionLimit(maxCon int, blocking bool) {
 		connectionLimit = nil
 	}
 	blockingOnLimit = blocking
+}
+
+//Sets the time format which should be used when parsing from a string
+func SetTimeFormat(format string) {
+	timeFormat = format
 }
 
 // Create a new criteria for subsequent query
