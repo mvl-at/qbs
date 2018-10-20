@@ -211,3 +211,9 @@ func (d sqlite3) primaryKeySql(isString bool, size int) string {
 	}
 	return "integer PRIMARY KEY AUTOINCREMENT NOT NULL"
 }
+
+func normalizeTime(oldTime *time.Time) {
+	_, offset := oldTime.Zone()
+	newTime := oldTime.Round(time.Minute).In(time.UTC).Add(time.Duration(offset) * time.Second)
+	oldTime = &newTime
+}

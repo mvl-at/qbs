@@ -96,6 +96,11 @@ func (model *model) columnsAndValues(forUpdate bool) ([]string, []interface{}) {
 	columns := make([]string, 0, len(model.fields))
 	values := make([]interface{}, 0, len(columns))
 	for _, column := range model.fields {
+		if reflect.TypeOf(column.value).Name() == reflect.TypeOf(time.Now()).Name() {
+			oldTime := column.value.(time.Time)
+			_, offset := oldTime.Zone()
+			column.value = oldTime.Round(time.Minute).In(time.UTC).Add(time.Duration(offset) * time.Second)
+		}
 		var include bool
 		if forUpdate {
 			include = column.value != nil && !column.pk

@@ -22,7 +22,7 @@ var stmtMap map[string]*sql.Stmt
 var mu *sync.RWMutex
 var queryLogger *log.Logger = log.New(os.Stdout, "qbs:", log.LstdFlags)
 var errorLogger *log.Logger = log.New(os.Stderr, "qbs:", log.LstdFlags)
-var timeFormat = "2006-01-02 15:04:05.999999999-07:00"
+var timeFormat = "2006-01-02 15:04"
 
 type Qbs struct {
 	Dialect      Dialect
